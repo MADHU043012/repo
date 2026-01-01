@@ -5,6 +5,7 @@ module "vpc" {
   availability_zone   = "ap-southeast-2a"
 }
 
+
 terraform {
     backend "s3" {
     bucket = "terraform-backup-s3-2025"
