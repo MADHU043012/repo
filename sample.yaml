@@ -1,0 +1,41 @@
+
+- name: My first playbook
+  hosts: all
+  var_files:
+     -./var.txt
+  
+  tasks:
+    - name: Print welcome
+      debug:
+        msg: "hello I am Ansible"
+
+    - name: Print fruits
+      debug:
+        msg: "apples and mangoes"
+
+    - name: Print more fruits
+      debug:
+        msg: "grapes and oranges"
+
+
+- name: Variable playbook
+  hosts: localhost
+
+  vars:
+    fruit: "mangoes"
+
+  tasks:
+    - name: Print variable
+      debug:
+        msg: "my favourite is {{ fruit }}"
+
+---
+- name: Fruits variable example
+  hosts: all
+  vars_files:
+    - vars/fruits.yml
+
+  tasks:
+    - name: Print fruits
+      debug:
+        msg: "I like {{ fruit1 }} and {{ fruit2 }}"
