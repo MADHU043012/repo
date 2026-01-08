@@ -1,0 +1,32 @@
+
+- name: Install multiple packages using loop
+  hosts: all
+  become: yes
+  gather_facts: yes
+
+  vars:
+    packages_redhat:
+      - vim
+      - htop
+      - git
+    packages_debian:
+      - vim
+      - htop
+      - git
+
+  tasks:
+
+    - name: Install packages on RedHat
+      yum:
+        name: "{{ item }}"
+        state: present
+      loop: "{{ packages_redhat }}"
+      when: ansible_os_family == "RedHat"
+
+    - name: Install packages on Debian
+      apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+      loop: "{{ packages_debian }}"
+      when: ansible_os_family == "Debian"
