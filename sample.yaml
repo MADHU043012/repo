@@ -1,9 +1,9 @@
-
+---
 - name: My first playbook
   hosts: all
-  var_files:
-     -./var.txt
-  
+  vars_files:
+    - ./var.txt   
+
   tasks:
     - name: Print welcome
       debug:
@@ -17,7 +17,6 @@
       debug:
         msg: "grapes and oranges"
 
-
 - name: Variable playbook
   hosts: localhost
 
@@ -29,7 +28,6 @@
       debug:
         msg: "my favourite is {{ fruit }}"
 
----
 - name: Fruits variable example
   hosts: all
   vars_files:
