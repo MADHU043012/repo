@@ -31,7 +31,7 @@
 - name: Fruits variable example
   hosts: all
   vars_files:
-    - vars/fruits.yml
+    - vars/fruits.yaml
 
   tasks:
     - name: Print fruits
