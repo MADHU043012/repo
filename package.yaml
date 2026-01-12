@@ -1,0 +1,28 @@
+  - name: install java (required for tomcat)
+    yum:
+      name: java-1.8.0-openjdk
+      state: present
+
+    -name: install tomcat
+    yum:
+      name: tomcat
+      state: present
+
+      -name: install apachae on Redhat family
+      yum:
+        name: httpd
+        state: present
+        when: ansible_os_family == "Redhat"
+
+        -name: install Apache on Debian family
+        apt: 
+          name: apache2
+          state: present
+          update_cache: yes
+          when: ansible_os_family == "Debian"
+
+        -name: create sample index.html
+        copy:
+        content: "<h1>Apache Installed via Ansible</h1>"
+        dest: /var/www/html/index.html
+        when: ansible_os_family ["Redhat", "Debian"]

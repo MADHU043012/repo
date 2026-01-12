@@ -24,3 +24,19 @@
         state: present
         update_cache: yes
       when: ansible_os_family == "Debian"
+      
+      - 
+      -name: install and configure tomcat web server
+       hosts: web 
+       become: yes
+       
+       vars:
+          tomcat_port: 8080
+
+      -name: install and configure Apache web server
+        hosts: web
+        become: yes
+
+        roles:
+          - httpd
+          - tomcat

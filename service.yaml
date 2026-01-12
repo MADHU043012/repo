@@ -1,0 +1,19 @@
+  - name: start tomcat service
+    service:
+      name: tomcat
+      state: started
+      enabled: yes
+
+    -name: start Apachae on Redhat family
+    service:
+     name: httpd
+     state: started
+     enabled: yes
+    when: ansible_os_family == "Redhat"
+
+    -name: started Apache on Debian family
+    service:
+     name: apache2
+     state: started
+     enabled: yes
+    when : ansible_os_family == "Debian"
