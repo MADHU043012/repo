@@ -1,3 +1,4 @@
-#SPDX-License-Identifier: MIT-0
----
-# vars file for new_role
+
+web_package: httpd
+web_service: httpd
+server_name: Ansible Web Server

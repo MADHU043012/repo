@@ -37,3 +37,4 @@
     - name: Print fruits
       debug:
         msg: "I like {{ fruit1 }} and {{ fruit2 }}"
+

@@ -1,3 +1,23 @@
-#SPDX-License-Identifier: MIT-0
----
-# tasks file for new_role
+
+
+- name: Install Apache web server
+  yum:
+    name: "{{ web_package }}"
+    state: present
+  notify: Restart Apache
+
+- name: Start and enable Apache service
+  service:
+    name: "{{ web_service }}"
+    state: started
+    enabled: yes
+
+- name: Deploy index.html
+  template:
+    src: index.html
+    dest: /var/www/html/index.html
+    owner: root
+    group: root
+    mode: '0644'
+  notify: Restart Apache
+

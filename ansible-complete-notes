@@ -1,0 +1,215 @@
+Ansible – Complete DevOps Notes
+📌 What is Ansible?
+
+Ansible is an open-source automation tool used for:
+
+Configuration Management
+
+Application Deployment
+
+Server Provisioning
+
+Orchestration
+
+👉 Definition:
+Ansible is an agentless configuration management and automation tool that uses SSH to manage remote systems.
+
+Ansible Architecture (Deep Explanation)
+🔹 Control Node
+
+Machine where Ansible is installed
+
+Executes playbooks
+
+🔹 Managed Nodes
+
+Target servers
+
+No agent required
+
+🔹 Communication
+
+Linux → SSH
+
+Windows → WinRM
+
+📦 Installation (Ubuntu)
+sudo apt update
+sudo apt install ansible -y
+Check version:
+Check version:
+
+Step 1: Passwordless SSH Setup (Very Important)
+
+Generate SSH key:
+ssh-keygen
+
+Copy key to remote server:
+ssh-copy-id user@remote_ip
+
+Test SSH:
+ssh user@remote_ip
+
+Inventory Configuration (Using vim)
+
+Default inventory location:
+/etc/ansible/hosts
+
+Open using vim:
+sudo vim /etc/ansible/hosts
+
+Example inventory:
+[webservers]
+192.168.1.10
+192.168.1.11
+
+[dbservers]
+192.168.1.20
+
+[all:vars]
+ansible_user=ubuntu
+ansible_ssh_private_key_file=/home/ubuntu/.ssh/id_rsa
+
+Save in vim.
+
+Test Connectivity
+ansible all -m ping
+
+If success: SUCCESS => pong
+
+Ad-Hoc Commands
+Check uptime:
+ansible all -a "uptime"
+
+Install package:
+
+ansible webservers -m apt -a "name=nginx state=present" --become
+
+Start service:
+
+ansible webservers -m service -a "name=nginx state=started" --become
+
+Create user:
+ansible all -m user -a "name=devops password=12345" --become
+
+Playbook (Example)
+
+Create file:
+vim nginx-install.yml
+
+Paste:
+
+---
+- name: Install and start nginx
+  hosts: webservers
+  become: yes
+
+  tasks:
+    - name: Install nginx
+      apt:
+        name: nginx
+        state: present
+
+    - name: Start nginx
+      service:
+        name: nginx
+        state: started
+        enabled: yes
+
+        Run playbook:
+
+        ansible-playbook nginx-install.yml
+
+        yml
+🔥 Important Concepts :
+✅ Idempotency
+
+Running playbook multiple times will not change system if already configured.
+
+✅ Variables
+
+Example:
+
+vars:
+  package_name: nginx
+
+  Use:
+
+  name: "{{ package_name }}"
+
+  ✅ Handlers
+
+Triggered only when task changes.
+
+handlers:
+  - name: restart nginx
+    service:
+      name: nginx
+      state: restarted
+
+      ✅ Tags
+
+Run specific tasks:
+
+ansible-playbook nginx.yml --tags "install"
+
+Roles Structure (Production Level)
+
+Create role:
+
+ansible-galaxy init nginx_role
+
+Structure:
+
+nginx_role/
+ ├── tasks/
+ ├── handlers/
+ ├── templates/
+ ├── files/
+ ├── vars/
+ ├── defaults/
+
+ Use role in playbook:
+
+ ---
+- hosts: webservers
+  roles:
+    - nginx_role
+
+    nginx_role
+📊 Ansible Configuration File
+
+Location:
+
+/etc/ansible/ansible.cfg
+
+Important settings:
+
+inventory = /etc/ansible/hosts
+remote_user = ubuntu
+host_key_checking = False
+
+
+🚀 Important Commands Summary
+ansible --version
+ansible all -m ping
+ansible all -a "uptime"
+ansible-playbook file.yml
+ansible-inventory --list
+ansible-galaxy init role_name
+
+## 🆚 Ansible vs Terraform
+
+| Feature | Ansible | Terraform |
+|----------|----------|------------|
+| Type | Configuration Management | Infrastructure Provisioning |
+| State File | No | Yes |
+| Language | YAML | HCL |
+| Agent Required | No | No |
+| Idempotent | Yes | Yes |
+
+Yes
+🎯 Real-Time Project 
+
+"In project, we used Ansible to automate Nginx installation and configuration across multiple EC2 servers. We created inventory groups for dev and prod environments and used roles to maintain reusable configurations."
+
